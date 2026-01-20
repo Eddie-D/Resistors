@@ -19,6 +19,14 @@ def read_sets(path="resistances.json") :
     print("File read")
     return sets
 
+def dump_sets(sets, path="resistances.json") :
+    # Convert Fraction keys to strings for JSON serialization
+    sets_serializable = [{str(k): v for k, v in s.items()} for s in sets]
+
+    print("Dumping, DO NOT EXIT")
+    with open(path, "w") as f :
+        json.dump(sets_serializable, f, indent=4)
+
 def construct(type, x, y) :
     if x[0] == type :
         x = x[2:-1]
@@ -67,27 +75,15 @@ def print_constructions(f, sets) :
     for n in occurs :
         print(f"In S[{n}]: {f} = {get_construction(n, f, sets)}")
 
-def dump_sets(sets, path="resistances.json") :
-    # Convert Fraction keys to strings for JSON serialization
-    sets_serializable = [{str(k): v for k, v in s.items()} for s in sets]
-
-    print("Dumping, DO NOT EXIT")
-    with open(path, "w") as f :
-        json.dump(sets_serializable, f, indent=4)
-
-'''
-for i in range(10) :
-    print(i)
-    calculate_next(sets)
-'''
 
 sets = read_sets()
 
 # calculate_next(sets)
 # dump_sets(sets)
 
+# Querying part, change this to get results
 lengths = list(map(len, sets))
-print(f"Lengths: {lengths}")
+print(f"Sizes of Sn's: {lengths}")
 
 print(f"The number 1 can be made with: {find_occurences(Fraction(1), sets)} resistors")
 print(f"The number 1 can be made with 4 resistors by: {get_construction(4, Fraction(1), sets)}")
